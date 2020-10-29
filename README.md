@@ -3,31 +3,24 @@ mmd_tools
 
 Overview
 ----
-mmd_tools is a blender addon for importing MMD (MikuMikuDance) model data (.pmd, .pmx), motion data (.vmd) and pose data (.vpd). Exporting model data (.pmx), motion data (.vmd) and pose data (.vpd) are supported as well.
-
-mmd_toolsはMMD(MikuMikuDance)のモデルデータ(.pmd, .pmx)、モーションデータ(.vmd)、ポーズデータ(.vpd)をインポートするためのBlenderアドオンです。モデルデータ(.pmx)、モーションデータ(.vmd)、ポーズデータ(.vpd)のエクスポートにも対応しています。
-
-The detailed documentation can be found at Wiki Documentation Page.
-
-- [Documentation](../../wiki/Documentation)
-- [日本語ドキュメント](../../wiki/Documentation.ja)
+mmd_tools is a blender addon for importing MMD (MikuMikuDance) model data (.pmd, .pmx), motion data (.vmd) and pose data (.vpd). Exporting model data (.pmx), motion data (.vmd) and pose data (.vpd) are supported as well. This particular branch is modified to follow Unreal Engine 4's naming convention for armature, in the hope of easing the process of retargeting animations.
 
 ### Environment
 
 #### Compatible Versions
- - Blender 2.70 or later (Blender 2.75+ is recommended)
+ - Blender 2.80 or later
 
 Usage
 ---------
-### Download
 
-* Download mmd_tools from [the github repository](https://github.com/powroupi/blender_mmd_tools/tree/dev_test) (dev_test branch)
-    * https://github.com/powroupi/blender_mmd_tools/archive/dev_test.zip
+### Precautions for retargeting
+Please note that MMD armatures does not universally adhere to game engine armature standard. This can cause problems when retargeting animation montages/actions and scripts that was made for UE4 armature in mind to your desired MMD model.
+
+1. Most MMD armatures only have 2 spine bones, as opposed to Unreal Engine's 3 spine bone standard. This makes retargeting UE animations a bit confusing. In that case, you can skip UE's *spine_01* bone when retargeting animations.
+2. Most, *but not all*, MMD armatures also following their own MMD bone parenting convention, which by itself, does not adhere to game engine armature standard. This is a common problem with MMD models, and unfortunately, there is no "one solution fits all" for this case. However, you can adapt the bone parenting of the model you use by yourself to fit the game engine standard.
 
 ### Install
-Extract the archive and put the folder mmd_tools into the addon folder of blender.
-
-    .../blender-2.70-windows64/2.70/scripts/addons/
+Simply install the zip you downloaded from the GitHub page through Blender's Add-on Manager in Preferences. No manual extraction needed.
 
 ### Loading Addon
 1. User Preferences -> addon tab -> select the User filter with Community in 'Supported Level' check, then click the checkbox before mmd_tools (you can also find the addon using the search function)
@@ -40,7 +33,7 @@ The following settings can be configured under mmd_tools Addon Preferences.
 * Base Texture Folder
     * Path for textures shared between models. In order to copy textures properly while exporting to pmx file.
 * Dictionary Folder
-    * Path for searching custom csv dictionaries. You can create your own dictionary or download from [Hogarth-MMD/mmd_tools_translation](https://github.com/Hogarth-MMD/mmd_tools_translation).
+    * Path for searching custom csv dictionaries. This particular branch is following Unreal Engine's bone naming convention.
 
 ### Importing a model
 1. Go to the mmd_tools panel
@@ -53,6 +46,11 @@ The following settings can be configured under mmd_tools Addon Preferences.
 3. If a rigid body simulation is needed, press the _Build_ button in the same panel.
 
 Turn on the "update scene settings" checkbox to automatically update scene settings such as frame range after the motion import.
+
+### Exporting a model to FBX
+
+Due to Blender's exporting behaviour on skeletal meshes, and Unreal Engine's restriction of **one** root bone, 
+
 
 
 Various functions in detail
