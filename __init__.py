@@ -6,10 +6,8 @@ bl_info = {
     "version": (0, 7, 0),
     "blender": (2, 80, 0),
     "location": "View3D > Tool Shelf > MMD Tools Panel",
-    "description": "Utility tools for MMD model editing. (powroupi's forked version)",
+    "description": "Utility tools for MMD model editing. (modified for UE4 naming convention)",
     "warning": "",
-    "wiki_url": "https://github.com/powroupi/blender_mmd_tools/wiki",
-    "tracker_url": "https://github.com/powroupi/blender_mmd_tools/issues",
     "category": "Object",
     }
 
@@ -33,10 +31,7 @@ def register_wrap(cls):
     return cls
 
 if "bpy" in locals():
-    if bpy.app.version < (2, 71, 0):
-        import imp as importlib
-    else:
-        import importlib
+    import importlib
     importlib.reload(properties)
     importlib.reload(operators)
     importlib.reload(panels)
@@ -49,9 +44,6 @@ else:
     from . import properties
     from . import operators
     from . import panels
-
-if bpy.app.version < (2, 80, 0):
-    bl_info['blender'] = (2, 70, 0)
 
 logging.basicConfig(format='%(message)s', level=logging.DEBUG)
 
@@ -126,26 +118,15 @@ def register():
     properties.register()
     bpy.app.handlers.load_post.append(load_handler)
     bpy.types.VIEW3D_HT_header.append(header_view3d_pose_draw)
-    if bpy.app.version < (2, 80, 0):
-        bpy.types.INFO_MT_file_import.append(menu_func_import)
-        bpy.types.INFO_MT_file_export.append(menu_func_export)
-        bpy.types.INFO_MT_armature_add.append(menu_func_armature)
-        #bpy.context.user_preferences.system.use_scripts_auto_execute = True
-    else:
-        bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
-        bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
-        bpy.types.VIEW3D_MT_armature_add.append(menu_func_armature)
-        #bpy.context.preferences.filepaths.use_scripts_auto_execute = True
+    bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
+    bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
+    bpy.types.VIEW3D_MT_armature_add.append(menu_func_armature)
+    #bpy.context.preferences.filepaths.use_scripts_auto_execute = True
 
 def unregister():
-    if bpy.app.version < (2, 80, 0):
-        bpy.types.INFO_MT_file_import.remove(menu_func_import)
-        bpy.types.INFO_MT_file_export.remove(menu_func_export)
-        bpy.types.INFO_MT_armature_add.remove(menu_func_armature)
-    else:
-        bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
-        bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
-        bpy.types.VIEW3D_MT_armature_add.remove(menu_func_armature)
+    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
+    bpy.types.VIEW3D_MT_armature_add.remove(menu_func_armature)
     bpy.types.VIEW3D_HT_header.remove(header_view3d_pose_draw)
     bpy.app.handlers.load_post.remove(load_handler)
     properties.unregister()
